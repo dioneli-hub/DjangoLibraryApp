@@ -1,0 +1,86 @@
+{% extends "adminapp/base_adminapp.html" %}
+
+{% block title %}Книги пользователя{% endblock %}
+
+{% block content %}
+<div>
+    <div class="card">
+        <h5 class="card-header">{{user.first_name}} {{user.last_name}}</h5>
+        <div class="card-body">
+            <h5 class="card-title">Активные книги пользователя</h5>
+
+            {% if books %}
+                 <p class="card-text"><em>(здесь вы можете увидеть книги, которые на данный момент читает {{user.first_name}} {{user.last_name}})</em></p>
+                <div class="shadow p-3 mb-5 mt-4 bg-white rounded">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Название</th>
+                            <th scope="col">Автор</th>
+                            <th scope="col">Статус</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for book in books %}
+                        <tr>
+                            <td>{{ book.id }}</td>
+                            <td>{{ book.title }}</td>
+                            <td>{{ book.author }}</td>
+                            <td>to-do delete</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p>Не читает</p>
+            {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<h4>Найти книгу:</h4>
+<form method="GET" action="search/">
+    <div class="form-row">
+        <div class="form-group col-12">
+            <div class="input-group">
+                <input class="form-control py-2 border-right-0 border" id="book-search" type="search" name="title_or_author" placeholder="Введите название или автора..." />
+                <span class="input-group-append">
+                        <div class="input-group-text bg-transparent">
+                            <i class="fa fa-search"></i>
+                        </div>
+                    </span>
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Найти</button>
+</form>
+<br>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Название</th>
+        <th scope="col">Автор</th>
+        <th scope="col">(to-do Действие добавления)</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for book in queryset %}
+    <tr>
+        <td>{{ book.id }}</td>
+        <td>{{ book.title }}</td>
+        <td>{{ book.author }}</td>
+        <td>
+            <button class="btn btn-primary">To-do add</button>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

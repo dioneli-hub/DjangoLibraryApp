@@ -1,0 +1,62 @@
+{% extends "adminapp/base_adminapp.html" %}
+
+{% block title %}Библиотека{% endblock %}
+
+{% block content %}
+    <div class="shadow p-3 mb-5 mt-4 bg-white rounded">
+        <p>
+           <b> Пользователи:</b>
+        </p>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Имя</th>
+                <th scope="col">Фамилия</th>
+                <th scope="col">Контактный номер</th>
+                <th scope="col">Действие</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.first_name }}</td>
+                <td>{{ user.last_name }}</td>
+                <td>{{ user.phone_number }}</td>
+                <td>
+                    <a href="/active-books/{{ user.id }}" class="btn btn-primary">Активные книги</a>
+                    <a href="/delete-user/{{ user.id }}" class="btn btn-primary">Kiss Vadimka</a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">Добавьте нового пользователя:</h5>
+            <h6 class="card-subtitle mb-2 text-muted"><em>(только проверенные данные)</em></h6>
+            <form name = "create_new_user" id = "new_user_form" method="POST" action="create-user/">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="first_Name">Имя</label>
+                    <input type="text" class="form-control" id="first_Name" name="first_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="last_Name">Фамилия</label>
+                    <input type="text" class="form-control" id="last_Name" name="last_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="Tel">Контактный номер</label>
+                    <input type="tel" class="form-control" id="Tel" name="phone_number" required>
+                    <small id="emailHelp" class="form-text text-muted">Поле обязательно для заполнения</small>
+                </div>
+                <button type="submit" class="btn btn-primary" value="Save">Добавить</button>
+                <button type="reset" class="btn btn-primary" >Отмена</button>
+            </form>
+
+        </div>
+    </div>
+{% endblock %}

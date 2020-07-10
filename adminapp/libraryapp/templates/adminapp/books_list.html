@@ -1,0 +1,51 @@
+{% extends 'adminapp/base_adminapp.html' %}
+{% block title %} Список книг {% endblock %}
+{% block content %}
+<div>
+    <div class="shadow p-3 mb-5 mt-4 bg-white rounded">
+        <p>
+            <b> Список книг: </b>
+        </p>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Название</th>
+                <th scope="col">Автор</th>
+                <th scope="col">Статус</th>
+            </tr>
+            </thead>
+               <tbody id="books-list">
+            {% for book in books %}
+            <tr>
+                <td>{{ book.id }}</td>
+                <td>{{ book.title }}</td>
+                <td>{{ book.author }}</td>
+                <td>
+                    <a href="/edit-book/{{ book.id }}" class="btn btn-primary">Изменить</a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+        <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">Добавьте новую книгу:</h5>
+            <form name = "create_new_book" id = "new_book_form" method="POST"  action="create/">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="title">Название</label>
+                    <input type="text" class="form-control" id="title" name="title" required >
+                </div>
+                <div class="form-group">
+                    <label for="author">Автор</label>
+                    <input type="text" class="form-control" id="author" name="author" required>
+                </div>
+                <button type="submit" class="btn btn-primary" value="Save">Добавить</button>
+                <button type="reset" class="btn btn-primary">Отмена</button>
+            </form>
+</div>
+    {% endblock %}
+
+

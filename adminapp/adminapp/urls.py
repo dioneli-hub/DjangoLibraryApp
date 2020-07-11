@@ -28,6 +28,7 @@ urlpatterns = [
     path('create-user/', views.user_create_view, name='create-user'),
     path('delete-user/<int:id>', views.user_delete_view, name='delete-user'),
     path('edit-book/<int:id>', views.edit_book_view, name='edit-book'),
+    path('active-books/add_active/<int:id>', views.add_active_book, name='add-active'),
     path('admin/', admin.site.urls),
 
 ]

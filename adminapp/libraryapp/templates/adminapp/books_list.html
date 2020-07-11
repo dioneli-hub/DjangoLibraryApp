@@ -18,7 +18,7 @@
                <tbody id="books-list">
             {% for book in books %}
             <tr>
-                <td>{{ book.id }}</td>
+                <td>{{ forloop.counter }}</td>
                 <td>{{ book.title }}</td>
                 <td>{{ book.author }}</td>
                 <td>

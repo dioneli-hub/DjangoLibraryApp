@@ -8,8 +8,8 @@
     <div class="card-body">
         <h5 class="card-title">Название: "{{book.title}}"</h5>
         <h6 class="card-subtitle">Автор: {{book.author}}</h6>
-        <form name = "edit-book" id = "edit_book_form" method="POST" action="/edit-book/{{book.id}}">
-            {% csrf_token %}
+        <form name = "edit-book" id = "edit_book_form" method="GET" action="/edit-book/{{book.id}}">
+
             <div class="form-group">
                 <label class="control-label" for="title">Введите название:</label>
                 <input type="text" class="form-control" id="title" name="title" value="{{book.title}}" required >

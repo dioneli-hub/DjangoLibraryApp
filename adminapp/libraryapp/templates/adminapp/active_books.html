@@ -24,7 +24,7 @@
                         <tbody>
                         {% for book in books %}
                         <tr>
-                            <td>{{ book.id }}</td>
+                            <td>{{ forloop.counter }}</td>
                             <td>{{ book.title }}</td>
                             <td>{{ book.author }}</td>
                             <td>to-do delete</td>
@@ -43,44 +43,23 @@
 </div>
 <br>
 <h4>Найти книгу:</h4>
-<form method="GET" action="search/">
-    <div class="form-row">
-        <div class="form-group col-12">
-            <div class="input-group">
-                <input class="form-control py-2 border-right-0 border" id="book-search" type="search" name="title_or_author" placeholder="Введите название или автора..." />
-                <span class="input-group-append">
-                        <div class="input-group-text bg-transparent">
-                            <i class="fa fa-search"></i>
-                        </div>
-                    </span>
-            </div>
-        </div>
+{% if books_available %}
+<div class="row">
+    <div class="col-4">
+        <form name="selectedBookId" method="POST" action="add_active/{{user.id}}">
+             {% csrf_token %}
+            <select name="selectedBookId" onchange="console.log(this.value)" class="form-control mb-3">
+                <option disabled="disabled" selected="selected">Выберите книгу</option>
+                {% for b in books_available %}
+                <option value="{{b.id}}">"{{b.title}}" {{b.author}}</option>
+                {% endfor %}
+            </select>
+
+            <input type="submit" value="Добавить" class="btn btn-primary">
+        </form>
     </div>
-
-    <button type="submit" class="btn btn-primary">Найти</button>
-</form>
-<br>
-<table class="table table-striped">
-    <thead>
-    <tr>
-        <th scope="col">#</th>
-        <th scope="col">Название</th>
-        <th scope="col">Автор</th>
-        <th scope="col">(to-do Действие добавления)</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for book in queryset %}
-    <tr>
-        <td>{{ book.id }}</td>
-        <td>{{ book.title }}</td>
-        <td>{{ book.author }}</td>
-        <td>
-            <button class="btn btn-primary">To-do add</button>
-        </td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
-
+</div>
+{% else %}
+<h4>Нет доступных книг</h4>
+{% endif %}
 {% endblock %}

@@ -17,12 +17,21 @@ def active_books(request, id):
     user = User.objects.get(id=id)
     borrows = BorrowTransaction.objects.filter(user_id=id)
     books = Book.objects.filter(id__in=[borrow.book_id for borrow in borrows])
+    books_available = Book.objects.exclude(id__in=[borrow.book_id for borrow in borrows])
 
-    return render(request, "adminapp/active_books.html", {"user": user, "books": books})
+    return render(request, "adminapp/active_books.html", {"user": user, "books": books, "books_available": books_available})
+
+
+def add_active_book(request, id):
+    if request.method == "POST":
+        user = User.objects.get(id=id)
+        book_id = request.POST.get("selectedBookId")
+        BorrowTransaction.objects.create(user_id=user.id, book_id=book_id, is_returned='False')
+        return redirect(f'/active-books/{user.id}')
+    return render(request, "adminapp/active_books.html")
 
 
 def book_details(request):
-    ###
     return render(request, "adminapp/book_details.html")
 
 
@@ -70,24 +79,9 @@ def user_delete_view(request, id):
     return render(request, 'adminapp/index.html')
 
 
-def BootstrapFilterView(request):
-    qs = filter(request)
-    context = {
-        'queryset': qs
-    }
-    return render(request, "active-books/<int:id>", context)
 
 
-def filter(request):
-    qs = Book.objects.all()
-    title_or_author_query = request.GET.get('title_or_author')
-
-    if is_valid_queryparam(title_or_author_query):
-        qs = qs.filter(Q(title__icontains=title_or_author_query)
-                       | Q(author__icontains=title_or_author_query)
-                       ).distinct()
-    return qs
 
 
-def is_valid_queryparam(param):
-    return param != '' and param is not None
+
+

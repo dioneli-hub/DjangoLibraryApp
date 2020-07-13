@@ -3,25 +3,47 @@
 {% block title %}Информация о книге{% endblock %}
 
 {% block content %}
-
-<div class="card" style="width: 18rem;">
-    <div class="card-body">
-        <h5 class="card-title">Название: "{{book.title}}"</h5>
-        <h6 class="card-subtitle">Автор: {{book.author}}</h6>
-        <form name = "edit-book" id = "edit_book_form" method="GET" action="/edit-book/{{book.id}}">
-
-            <div class="form-group">
-                <label class="control-label" for="title">Введите название:</label>
-                <input type="text" class="form-control" id="title" name="title" value="{{book.title}}" required >
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link active" data-toggle="tab" href="#change-details">Изменить</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#change_history">История изменений</a>
+  </li>
+</ul>
+<div class="tab-content">
+  <div class="tab-pane fade show active" id="change-details">
+      <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Название: "{{book.title}}"</h5>
+                <h6 class="card-subtitle">Автор: {{book.author}}</h6>
+                <form name = "edit-book" id = "edit_book_form" method="POST" action="/edit-book/{{book.id}}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label class="control-label" for="title">Введите название:</label>
+                        <input type="text" class="form-control" id="title" name="title" value="{{book.title}}" required >
+                    </div>
+                    <div class="form-group">
+                        <label for="author" class="control-label">Введите автора:</label>
+                        <input type="text" class="form-control" id="author" name="author" value="{{book.author}}" required>
+                    </div>
+                <button type="submit" class="btn btn-primary" value="Save">Добавить</button>
+                <button type="reset" class="btn btn-danger">Отмена</button>
+                </form>
             </div>
-            <div class="form-group">
-                <label for="author" class="control-label">Введите автора:</label>
-                <input type="text" class="form-control" id="author" name="author" value="{{book.author}}" required>
-            </div>
-            <button type="submit" class="btn btn-primary" value="Save">Добавить</button>
-            <button type="reset" class="btn btn-danger">Отмена</button>
-         </form>
-     </div>
- </div>
+      </div>
+  </div>
+  <div class="tab-pane fade mt-4" id="change_history">
+      <h5>Дата создания: {{book.get_created_at}}</h5>
+      <h5>Последние изменения: {{book.get_updated_at}}</h5>
+  </div>
+</div>
+
+
+
+
+
+
+
 
 {% endblock %}

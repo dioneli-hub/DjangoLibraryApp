@@ -31,5 +31,3 @@ function onAddBookHandler() {
     renderBooksToTable();# TO BE CONTINUED
     document.getElementById('new_book_form').reset();
 }
-
-

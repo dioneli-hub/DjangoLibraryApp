@@ -14,7 +14,7 @@
                 <th scope="col">Имя</th>
                 <th scope="col">Фамилия</th>
                 <th scope="col">Контактный номер</th>
-                <th scope="col">Действие</th>
+                <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
@@ -26,7 +26,7 @@
                 <td>{{ user.phone_number }}</td>
                 <td>
                     <a href="/active-books/{{ user.id }}" class="btn btn-primary">Активные книги</a>
-                    <a href="/delete-user/{{ user.id }}" class="btn btn-primary">Kiss Vadimka</a>
+                    <a href="/delete-user/{{ user.id }}" class="btn btn-danger">Kiss Vadimka</a>
                 </td>
             </tr>
             {% endfor %}
@@ -54,7 +54,7 @@
                     <small id="emailHelp" class="form-text text-muted">Поле обязательно для заполнения</small>
                 </div>
                 <button type="submit" class="btn btn-primary" value="Save">Добавить</button>
-                <button type="reset" class="btn btn-primary" >Отмена</button>
+                <button type="reset" class="btn btn-danger" >Отмена</button>
             </form>
 
         </div>

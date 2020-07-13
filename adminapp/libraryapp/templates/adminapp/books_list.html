@@ -13,6 +13,7 @@
                 <th scope="col">Название</th>
                 <th scope="col">Автор</th>
                 <th scope="col">Статус</th>
+                <th scope="col"></th>
             </tr>
             </thead>
                <tbody id="books-list">
@@ -21,6 +22,9 @@
                 <td>{{ forloop.counter }}</td>
                 <td>{{ book.title }}</td>
                 <td>{{ book.author }}</td>
+                <td>
+                    to-do status
+                </td>
                 <td>
                     <a href="/edit-book/{{ book.id }}" class="btn btn-primary">Изменить</a>
                 </td>

@@ -35,3 +35,5 @@ class BorrowTransaction(TimeStampMixin):
     user = models.ForeignKey(User, null=True, on_delete=SET_NULL)
     book = models.ForeignKey(Book, null=True, on_delete=SET_NULL)
     is_returned = models.BooleanField(default='True')
+        
+

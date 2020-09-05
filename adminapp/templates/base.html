@@ -22,21 +22,37 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav">
+                            {% if is_main_active %}
                             <li class="nav-item active">
                                 <a class="nav-link" href="/">Главная <span class="sr-only">(current)</span></a>
                             </li>
-                            <li class="nav-item">
+                            {% else %}
+                            <li class="nav-item ">
+                                <a class="nav-link" href="/">Главная <span class="sr-only">(current)</span></a>
+                            </li>
+                            {%endif%}
+
+                            {% if is_books_active %}
+                            <li class="nav-item active">
                                 <a class="nav-link" href="/books">Список книг</a>
                             </li>
+                            {% else %}
+                             <li class="nav-item">
+                                <a class="nav-link" href="/books">Список книг</a>
+                            </li>
+                            {%endif%}
 
                         </ul>
                     </div>
                 </nav>
             <div class="content">{% block content%} {% endblock %}</div>
             </main>
-            <footer>
-                    <div class="item"> Powered by Diana Levchenko, 2020 </div>
+            <footer class="footer py-3 border-top shadow-none p-4 bg-light">
+                <div class="container">
+                    <span class="text-muted">Powered by Diana Levchenko, 2020</span>
+                </div>
             </footer>
+
             <script src="{% static '/js/scripts.js'%}"></script>
             <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
             <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>

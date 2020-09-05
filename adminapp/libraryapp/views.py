@@ -4,7 +4,7 @@ from .models import User, BorrowTransaction, Book
 
 def index(request):
     users = User.objects.all()
-    return render(request, "adminapp/index.html", {"users": users})
+    return render(request, "adminapp/index.html", {"users": users, "is_main_active": True})
 
 
 def books_list(request):
@@ -16,7 +16,7 @@ def books_list(request):
         else:
             book.status = 'Недоступна'
 
-    return render(request, "adminapp/books_list.html", {"books": books})
+    return render(request, "adminapp/books_list.html", {"books": books, "is_books_active": True})
 
 
 def active_books(request, id):

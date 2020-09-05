@@ -3,8 +3,17 @@
 {% block title %}Книги пользователя{% endblock %}
 
 {% block content %}
-<div>
-    <div class="card">
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link active" data-toggle="tab" href="#books">Книги пользователя</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#user-history">История пользователя</a>
+  </li>
+</ul>
+<div class="tab-content">
+    <div class="tab-pane fade show active" id="books">
+        <div class="card">
         <h5 class="card-header">{{user.first_name}} {{user.last_name}}</h5>
         <div class="card-body">
             <h5 class="card-title">Активные книги пользователя</h5>
@@ -27,7 +36,9 @@
                             <td>{{ forloop.counter }}</td>
                             <td>{{ book.title }}</td>
                             <td>{{ book.author }}</td>
-                            <td>to-do delete</td>
+                            <td>
+                                <a href="/return-active-book/{{ book.id }}" class="btn btn-danger">Вернуть книгу</a>
+                            </td>
                         </tr>
                         {% endfor %}
                         </tbody>
@@ -36,14 +47,53 @@
             {% else %}
                 <p>Не читает</p>
             {% endif %}
-
-            </div>
+        </div>
         </div>
     </div>
+    <div class="tab-pane fade show" id="user-history">
+        <h5 class="card-header">{{user.first_name}} {{user.last_name}}</h5>
+        {% if borrows %}
+       <table class="table table-striped">
+           <thead>
+           <tr>
+               <th scope="col">#</th>
+               <th scope="col">Название</th>
+               <th scope="col">Автор</th>
+               <th scope="col">Выдана</th>
+               <th scope="col">Сдана</th>
+               <th scope="col">Статус</th>
+           </tr>
+           </thead>
+           <tbody>
+           {% for borrow in borrows %}
+           <tr>
+               <td>{{ forloop.counter }}</td>
+               <td>{{ borrow.book.title }}</td>
+               <td>{{ borrow.book.author }}</td>
+               <td>{{borrow.get_created_at}}</td>
+
+               {% if borrow.is_returned %}
+               <td>{{borrow.get_updated_at}}</td>
+               {% else %}
+               <td>-</td>
+               {% endif %}
+
+               {% if borrow.is_returned %}
+               <td>Сдана</td>
+               {% else %}
+               <td>В процессе чтения</td>
+               {% endif %}
+           </tr>
+           {% endfor %}
+           </tbody>
+       </table>
+        {% endif %}
+    </div>
 </div>
+
 <br>
-<h4>Найти книгу:</h4>
 {% if books_available %}
+<h4>Найти книгу:</h4>
 <div class="row">
     <div class="col-4">
         <form name="selectedBookId" method="POST" action="add_active/{{user.id}}">
@@ -59,7 +109,5 @@
         </form>
     </div>
 </div>
-{% else %}
-<h4>Нет доступных книг</h4>
 {% endif %}
 {% endblock %}

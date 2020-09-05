@@ -21,6 +21,7 @@ class User(TimeStampMixin):
     first_name = models.CharField(max_length=40)
     last_name = models.CharField(max_length=40)
     phone_number = models.CharField(max_length=15)
+    is_active = models.BooleanField(default=True)
 
     def get_absolute_url(self):
         return reverse('active', kwargs={'id': self.id})
@@ -34,6 +35,8 @@ class Book(TimeStampMixin):
 class BorrowTransaction(TimeStampMixin):
     user = models.ForeignKey(User, null=True, on_delete=SET_NULL)
     book = models.ForeignKey(Book, null=True, on_delete=SET_NULL)
-    is_returned = models.BooleanField(default='True')
-        
+    is_returned = models.BooleanField(default=True)
+
+
+
 

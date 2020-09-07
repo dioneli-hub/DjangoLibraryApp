@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'libraryapp',
 
-    'django_filters'
+    'django_filters',
+    'bootstrapform'
 ]
 
 MIDDLEWARE = [

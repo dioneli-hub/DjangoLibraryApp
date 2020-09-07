@@ -1,81 +1,81 @@
 {% extends "adminapp/base_adminapp.html" %}
-
+{% load bootstrap %}
 {% block title %}Библиотека{% endblock %}
 
 {% block content %}
-    <div class="shadow p-3 mb-5 mt-4 bg-white rounded">
-        <p>
-           <b> Пользователи:</b>
-        </p>
-        <form method="get">
-            {{ myFilter.form }}
-            <button class="btn btn-primary" type="submit">Найти</button>
-        </form>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Имя</th>
-                <th scope="col">Фамилия</th>
-                <th scope="col">Контактный номер</th>
-                <th scope="col">Статус</th>
-                <th scope="col"></th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for user in users %}
-            <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ user.first_name }}</td>
-                <td>{{ user.last_name }}</td>
-                <td>{{ user.phone_number }}</td>
+<div class="shadow p-3 mb-5 mt-4 bg-white rounded">
+    <p>
+        <b> Пользователи:</b>
+    </p>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <form method="get">
+            <th scope="col"></th>
+            <th scope="col">{{ myFilter.form.first_name|bootstrap }}</th>
+            <th scope="col">{{ myFilter.form.last_name|bootstrap }}</th>
+            <th scope="col">{{ myFilter.form.phone_number|bootstrap }}</th>
+            <th scope="col">{{ myFilter.form.is_active|bootstrap}}</th>
+            <th scope="col"><button class="btn btn-primary" type="submit">Найти</button></th>
+            </form>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        {% for user in users %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ user.first_name }}</td>
+            <td>{{ user.last_name }}</td>
+            <td>{{ user.phone_number }}</td>
+
+            {% if user.is_active %}
+            <td>Активный читатель</td>
+            {% else %}
+            <td>Ушёл в море</td>
+            {% endif %}
+
+            <td>
+                <a href="/active-books/{{ user.id }}" class="btn btn-primary">Активные книги</a>
+
 
                 {% if user.is_active %}
-                    <td>Активный читатель</td>
+                <a href="/change-user-active/{{ user.id }}" class="btn btn-danger da">Отправить в ссылку</a>
                 {% else %}
-                    <td>Ушёл в море</td>
+                <a href="/change-user-active/{{ user.id }}" class="btn btn-danger da">Вернуть на сушу</a>
                 {% endif %}
 
-                <td>
-                    <a href="/active-books/{{ user.id }}" class="btn btn-primary">Активные книги</a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <h5 class="card-title">Добавьте нового пользователя:</h5>
+        <h6 class="card-subtitle mb-2 text-muted"><em>(только проверенные данные)</em></h6>
+        <form name="create_new_user" id="new_user_form" method="POST" action="create-user/">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="first_Name">Имя</label>
+                <input type="text" class="form-control" id="first_Name" name="first_name" required>
+            </div>
+            <div class="form-group">
+                <label for="last_Name">Фамилия</label>
+                <input type="text" class="form-control" id="last_Name" name="last_name" required>
+            </div>
+            <div class="form-group">
+                <label for="Tel">Контактный номер</label>
+                <input type="tel" class="form-control" id="Tel" name="phone_number" required>
+                <small id="emailHelp" class="form-text text-muted">Поле обязательно для заполнения</small>
+            </div>
+            <button type="submit" class="btn btn-primary" value="Save">Добавить</button>
+            <button type="reset" class="btn btn-danger">Отмена</button>
+        </form>
 
-                    {% if user.is_active %}
-                        <a href="/change-user-active/{{ user.id }}" class="btn btn-danger da">Отправить в ссылку</a>
-                    {% else %}
-                        <a href="/change-user-active/{{ user.id }}" class="btn btn-danger da">Вернуть на сушу</a>
-                    {% endif %}
-
-                </td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
     </div>
-
-    <div class="card" style="width: 18rem;">
-        <div class="card-body">
-            <h5 class="card-title">Добавьте нового пользователя:</h5>
-            <h6 class="card-subtitle mb-2 text-muted"><em>(только проверенные данные)</em></h6>
-            <form name = "create_new_user" id = "new_user_form" method="POST" action="create-user/">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="first_Name">Имя</label>
-                    <input type="text" class="form-control" id="first_Name" name="first_name" required>
-                </div>
-                <div class="form-group">
-                    <label for="last_Name">Фамилия</label>
-                    <input type="text" class="form-control" id="last_Name" name="last_name" required>
-                </div>
-                <div class="form-group">
-                    <label for="Tel">Контактный номер</label>
-                    <input type="tel" class="form-control" id="Tel" name="phone_number" required>
-                    <small id="emailHelp" class="form-text text-muted">Поле обязательно для заполнения</small>
-                </div>
-                <button type="submit" class="btn btn-primary" value="Save">Добавить</button>
-                <button type="reset" class="btn btn-danger" >Отмена</button>
-            </form>
-
-        </div>
-    </div>
+</div>
 {% endblock %}

@@ -1,10 +1,15 @@
 from django.shortcuts import render, redirect
 from .models import User, BorrowTransaction, Book
+from .filters import UserFilter
 
 
 def index(request):
     users = User.objects.all()
-    return render(request, "adminapp/index.html", {"users": users, "is_main_active": True})
+
+    myFilter = UserFilter(request.GET, queryset=users)
+    users = myFilter.qs
+
+    return render(request, "adminapp/index.html", {"users": users, "is_main_active": True, "myFilter": myFilter})
 
 
 def books_list(request):

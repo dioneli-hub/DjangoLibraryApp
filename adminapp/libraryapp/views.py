@@ -73,9 +73,12 @@ def edit_book_view(request, id):
         book = Book.objects.get(id=id)
 
         if request.method == "POST":
+            old_title = book.title
+            old_author = book.author
             book.title = request.POST.get("title")
             book.author = request.POST.get("author")
-            book.save()
+            if old_title != book.title or old_author != book.author:
+                book.save()
             return redirect(f'/edit-book/{id}')
         else:
             return render(request, "adminapp/book_details.html", {"book": book})

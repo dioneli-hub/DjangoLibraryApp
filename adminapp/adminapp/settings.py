@@ -79,9 +79,9 @@ WSGI_APPLICATION = 'adminapp.wsgi.application'
 DATABASES = {
     "default": {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'librarydb_2',
+        'NAME': 'libraryapp',
         'USER': 'postgres',
-        'PASSWORD': 'lbfyf1',
+        'PASSWORD': 'postgres',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }

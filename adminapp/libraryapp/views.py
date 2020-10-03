@@ -103,3 +103,5 @@ def change_user_active_view(request, id):
         user.save()
         return redirect('home')
     return render(request, 'adminapp/index.html')
+
+

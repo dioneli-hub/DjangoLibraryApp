@@ -30,6 +30,6 @@ urlpatterns = [
     path('edit-book/<int:id>', views.edit_book_view, name='edit-book'),
     path('active-books/add_active/<int:id>', views.add_active_book, name='add-active'),
     path('return-active-book/<int:id>', views.return_active_book, name='return-book'),
-    path('admin/', admin.site.urls),
 
+    path('admin/', admin.site.urls),
 ]

@@ -30,6 +30,7 @@ class User(TimeStampMixin):
 class Book(TimeStampMixin):
     title = models.CharField(max_length=40)
     author = models.CharField(max_length=40)
+    # book description select AVG (book_id)
 
 
 class BorrowTransaction(TimeStampMixin):
@@ -38,5 +39,35 @@ class BorrowTransaction(TimeStampMixin):
     is_returned = models.BooleanField(default=True)
 
 
+class Grade(TimeStampMixin):
+    user = models.ForeignKey(User, null=True, on_delete=SET_NULL)
+    book = models.ForeignKey(Book, null=True, on_delete=SET_NULL)
+
+    BAD = '2'
+    OKAY = '3'
+    GOOD = '4'
+    EXCELLENT = '5'
+
+    GRADES_CHOICES = [
+        (BAD, '2'),
+        (OKAY, '3'),
+        (GOOD, '4'),
+        (EXCELLENT, '5'),
+    ]
+
+    grade = models.CharField(
+        max_length=1,
+        choices=GRADES_CHOICES,
+        default=OKAY,  # null=True
+    )
 
 
+    def get_average_mark(self, book_id):
+        marks = Grade.objects.get(book_id=book_id)
+        total = 0
+        count = 0
+        for grade in marks:
+            total += int(grade)
+            count += 1
+
+        return round(total/count, 2)

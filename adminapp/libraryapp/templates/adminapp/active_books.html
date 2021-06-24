@@ -37,13 +37,29 @@
                             <td>{{ book.title }}</td>
                             <td>{{ book.author }}</td>
                             <td>
-                                <a href="/return-active-book/{{ book.id }}" class="btn btn-danger">Return the book</a>
+                               <!-- <a href="#" onclick="popGrading()" class="btn btn-danger">Return the book</a>
+                                 /return-active-book/{{ book.id }} -->
+                                <form action="/return-active-book/{{ book.id }}" method="post">
+                                    {% csrf_token %}
+                                    <label for="cars">Mark the book</label>
+
+                                    <select name="mark" id="cars" required>
+                                      <option value="2">2</option>
+                                      <option value="3">3</option>
+                                      <option value="4">4</option>
+                                      <option value="5">5</option>
+                                    </select>
+
+                                    <button class="btn btn-danger" type="submit" >Return the book</button>
+                                </form>
                             </td>
                         </tr>
                         {% endfor %}
                         </tbody>
                     </table>
+
                 </div>
+
             {% else %}
                 <p>Not reading anything</p>
             {% endif %}
@@ -90,7 +106,6 @@
         {% endif %}
     </div>
 </div>
-
 <br>
 {% if books_available %}
 <h4>Find a book:</h4>
@@ -105,9 +120,12 @@
                 {% endfor %}
             </select>
 
-            <input type="submit" value="Добавить" class="btn btn-primary">
+            <input type="submit" value="Add" class="btn btn-primary">
         </form>
     </div>
 </div>
+
+
+
 {% endif %}
 {% endblock %}

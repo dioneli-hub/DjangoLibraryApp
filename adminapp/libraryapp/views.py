@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import User, BorrowTransaction, Book
+from .models import User, BorrowTransaction, Book, Grade
 from .filters import UserFilter
 
 
@@ -46,11 +46,16 @@ def add_active_book(request, id):
 
 
 def return_active_book(request, id):
-    if request.method == "GET":
+    if request.method == "POST":
         active_borrow = BorrowTransaction.objects.filter(is_returned='False').get(book_id=id)
         active_borrow.is_returned = True
         active_borrow.save()
         user = User.objects.get(id=active_borrow.user_id)
+        book = active_borrow.book
+        grade = request.POST.get('mark')
+        print(grade)
+
+        # Grade.objects.create(user=user, book=book, grade=grade)
         return redirect(f'/active-books/{user.id}')
     return render(request, "adminapp/active_books.html")
 

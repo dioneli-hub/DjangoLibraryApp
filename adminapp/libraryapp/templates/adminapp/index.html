@@ -1,11 +1,11 @@
 {% extends "adminapp/base_adminapp.html" %}
 {% load bootstrap %}
-{% block title %}Библиотека{% endblock %}
+{% block title %}Library{% endblock %}
 
 {% block content %}
 <div class="shadow p-3 mb-5 mt-4 bg-white rounded">
     <p>
-        <b> Пользователи:</b>
+        <b> Users:</b>
     </p>
     <table class="table table-striped">
         <thead>
@@ -16,9 +16,9 @@
             <th scope="col">{{ myFilter.form.last_name|bootstrap }}</th>
             <th scope="col">{{ myFilter.form.phone_number|bootstrap }}</th>
             <th scope="col">{{ myFilter.form.is_active|bootstrap}}</th>
-            <th scope="col"><button class="btn btn-primary mb-3" type="submit">Найти</button>
+            <th scope="col"><button class="btn btn-primary mb-3" type="submit">Find</button>
 
-            <a href="/" class="btn btn-link mb-3">Очистить поиск</a></th>
+            <a href="/" class="btn btn-link mb-3">Clear</a></th>
             </form>
         </tr>
         </thead>
@@ -33,19 +33,19 @@
             <td>{{ user.phone_number }}</td>
 
             {% if user.is_active %}
-            <td>Активный читатель</td>
+            <td>Active reader</td>
             {% else %}
-            <td>Ушёл в море</td>
+            <td>Inactive</td>
             {% endif %}
 
             <td>
-                <a href="/active-books/{{ user.id }}" class="btn btn-primary">Активные книги</a>
+                <a href="/active-books/{{ user.id }}" class="btn btn-primary">Active books</a>
 
 
                 {% if user.is_active %}
-                <a href="/change-user-active/{{ user.id }}" class="btn btn-danger da">Отправить в ссылку</a>
+                <a href="/change-user-active/{{ user.id }}" class="btn btn-danger da">Freeze</a>
                 {% else %}
-                <a href="/change-user-active/{{ user.id }}" class="btn btn-danger da">Вернуть на сушу</a>
+                <a href="/change-user-active/{{ user.id }}" class="btn btn-danger da">Make active</a>
                 {% endif %}
 
             </td>
@@ -57,25 +57,25 @@
 
 <div class="card" style="width: 18rem;">
     <div class="card-body">
-        <h5 class="card-title">Добавьте нового пользователя:</h5>
-        <h6 class="card-subtitle mb-2 text-muted"><em>(только проверенные данные)</em></h6>
+        <h5 class="card-title">Add a user:</h5>
+        <h6 class="card-subtitle mb-2 text-muted"><em>(verified data only)</em></h6>
         <form name="create_new_user" id="new_user_form" method="POST" action="create-user/">
             {% csrf_token %}
             <div class="form-group">
-                <label for="first_Name">Имя</label>
+                <label for="first_Name">Name</label>
                 <input type="text" class="form-control" id="first_Name" name="first_name" required>
             </div>
             <div class="form-group">
-                <label for="last_Name">Фамилия</label>
+                <label for="last_Name">Surname</label>
                 <input type="text" class="form-control" id="last_Name" name="last_name" required>
             </div>
             <div class="form-group">
-                <label for="Tel">Контактный номер</label>
+                <label for="Tel">Phone number</label>
                 <input type="tel" class="form-control" id="Tel" name="phone_number" required>
-                <small id="emailHelp" class="form-text text-muted">Поле обязательно для заполнения</small>
+                <small id="emailHelp" class="form-text text-muted">Required field</small>
             </div>
-            <button type="submit" class="btn btn-primary" value="Save">Добавить</button>
-            <button type="reset" class="btn btn-danger">Отмена</button>
+            <button type="submit" class="btn btn-primary" value="Save">Add</button>
+            <button type="reset" class="btn btn-danger">Cancel</button>
         </form>
 
     </div>

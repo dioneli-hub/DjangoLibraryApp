@@ -17,9 +17,9 @@ def books_list(request):
     for book in books:
         transactions = BorrowTransaction.objects.filter(book_id=book.id)
         if len(transactions) == 0 or len(transactions.filter(is_returned=False)) == 0:
-            book.status = 'Доступна'
+            book.status = 'Available'
         else:
-            book.status = 'Недоступна'
+            book.status = 'Unavailable'
 
     return render(request, "adminapp/books_list.html", {"books": books, "is_books_active": True})
 

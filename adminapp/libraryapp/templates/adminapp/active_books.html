@@ -1,14 +1,14 @@
 {% extends "adminapp/base_adminapp.html" %}
 
-{% block title %}Книги пользователя{% endblock %}
+{% block title %}User's books{% endblock %}
 
 {% block content %}
 <ul class="nav nav-tabs">
   <li class="nav-item">
-    <a class="nav-link active" data-toggle="tab" href="#books">Книги пользователя</a>
+    <a class="nav-link active" data-toggle="tab" href="#books">User's books</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" data-toggle="tab" href="#user-history">История пользователя</a>
+    <a class="nav-link" data-toggle="tab" href="#user-history">User's history</a>
   </li>
 </ul>
 <div class="tab-content">
@@ -16,18 +16,18 @@
         <div class="card">
         <h5 class="card-header">{{user.first_name}} {{user.last_name}}</h5>
         <div class="card-body">
-            <h5 class="card-title">Активные книги пользователя</h5>
+            <h5 class="card-title">Active user's books</h5>
 
             {% if books %}
-                 <p class="card-text"><em>(здесь вы можете увидеть книги, которые на данный момент читает {{user.first_name}} {{user.last_name}})</em></p>
+                 <p class="card-text"><em>(here you can see the books {{user.first_name}} {{user.last_name}} reads)</em></p>
                 <div class="shadow p-3 mb-5 mt-4 bg-white rounded">
                     <table class="table table-striped">
                         <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Название</th>
-                            <th scope="col">Автор</th>
-                            <th scope="col">Статус</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Author</th>
+                            <th scope="col">Status</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -37,7 +37,7 @@
                             <td>{{ book.title }}</td>
                             <td>{{ book.author }}</td>
                             <td>
-                                <a href="/return-active-book/{{ book.id }}" class="btn btn-danger">Вернуть книгу</a>
+                                <a href="/return-active-book/{{ book.id }}" class="btn btn-danger">Return the book</a>
                             </td>
                         </tr>
                         {% endfor %}
@@ -45,7 +45,7 @@
                     </table>
                 </div>
             {% else %}
-                <p>Не читает</p>
+                <p>Not reading anything</p>
             {% endif %}
         </div>
         </div>
@@ -57,11 +57,11 @@
            <thead>
            <tr>
                <th scope="col">#</th>
-               <th scope="col">Название</th>
-               <th scope="col">Автор</th>
-               <th scope="col">Выдана</th>
-               <th scope="col">Сдана</th>
-               <th scope="col">Статус</th>
+               <th scope="col">Title</th>
+               <th scope="col">Author</th>
+               <th scope="col">Issued</th>
+               <th scope="col">Returned</th>
+               <th scope="col">Status</th>
            </tr>
            </thead>
            <tbody>
@@ -79,9 +79,9 @@
                {% endif %}
 
                {% if borrow.is_returned %}
-               <td>Сдана</td>
+               <td>Returned</td>
                {% else %}
-               <td>В процессе чтения</td>
+               <td>Being read</td>
                {% endif %}
            </tr>
            {% endfor %}
@@ -93,13 +93,13 @@
 
 <br>
 {% if books_available %}
-<h4>Найти книгу:</h4>
+<h4>Find a book:</h4>
 <div class="row">
     <div class="col-4">
         <form name="selectedBookId" method="POST" action="add_active/{{user.id}}">
              {% csrf_token %}
             <select name="selectedBookId" onchange="console.log(this.value)" class="form-control mb-3">
-                <option disabled="disabled" selected="selected">Выберите книгу</option>
+                <option disabled="disabled" selected="selected">Choose a book</option>
                 {% for b in books_available %}
                 <option value="{{b.id}}">"{{b.title}}" {{b.author}}</option>
                 {% endfor %}

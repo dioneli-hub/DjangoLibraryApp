@@ -1,41 +1,41 @@
 {% extends "adminapp/base_adminapp.html" %}
 
-{% block title %}Информация о книге{% endblock %}
+{% block title %}Book info{% endblock %}
 
 {% block content %}
 <ul class="nav nav-tabs">
   <li class="nav-item">
-    <a class="nav-link active" data-toggle="tab" href="#change-details">Изменить</a>
+    <a class="nav-link active" data-toggle="tab" href="#change-details">Change</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" data-toggle="tab" href="#change_history">История изменений</a>
+    <a class="nav-link" data-toggle="tab" href="#change_history">Changes history</a>
   </li>
 </ul>
 <div class="tab-content">
   <div class="tab-pane fade show active" id="change-details">
       <div class="card" style="width: 18rem;">
             <div class="card-body">
-                <h5 class="card-title">Название: "{{book.title}}"</h5>
-                <h6 class="card-subtitle">Автор: {{book.author}}</h6>
+                <h5 class="card-title">Title: "{{book.title}}"</h5>
+                <h6 class="card-subtitle">Author: {{book.author}}</h6>
                 <form name = "edit-book" id = "edit_book_form" method="POST" action="/edit-book/{{book.id}}">
                     {% csrf_token %}
                     <div class="form-group">
-                        <label class="control-label" for="title">Введите название:</label>
+                        <label class="control-label" for="title">Enter the title:</label>
                         <input type="text" class="form-control" id="title" name="title" value="{{book.title}}" required >
                     </div>
                     <div class="form-group">
-                        <label for="author" class="control-label">Введите автора:</label>
+                        <label for="author" class="control-label">Enter the author:</label>
                         <input type="text" class="form-control" id="author" name="author" value="{{book.author}}" required>
                     </div>
-                <button type="submit" class="btn btn-primary" value="Save">Изменить</button>
-                <button type="reset" class="btn btn-danger">Отмена</button>
+                <button type="submit" class="btn btn-primary" value="Save">Change</button>
+                <button type="reset" class="btn btn-danger">Cancel</button>
                 </form>
             </div>
       </div>
   </div>
   <div class="tab-pane fade mt-4" id="change_history">
-      <h5>Дата создания: {{book.get_created_at}}</h5>
-      <h5>Последние изменения: {{book.get_updated_at}}</h5>
+      <h5>Creation date: {{book.get_created_at}}</h5>
+      <h5>Last changes: {{book.get_updated_at}}</h5>
   </div>
 </div>
 

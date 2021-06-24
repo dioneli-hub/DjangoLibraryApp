@@ -79,11 +79,11 @@ WSGI_APPLICATION = 'adminapp.wsgi.application'
 
 DATABASES = {
     "default": {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'libraryapp',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': '127.0.0.1',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'yciripvf',
+        'USER': 'yciripvf',
+        'PASSWORD': 'zCz4eaoXgHUyprx4Y0SEPaLQtGLBFj5q',
+        'HOST': 'dumbo.db.elephantsql.com.',
         'PORT': '5432',
     }
 }

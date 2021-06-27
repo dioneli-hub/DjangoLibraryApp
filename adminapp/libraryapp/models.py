@@ -30,7 +30,7 @@ class User(TimeStampMixin):
 class Book(TimeStampMixin):
     title = models.CharField(max_length=40)
     author = models.CharField(max_length=40)
-    description = models.TextField(max_length=500, default='no description', null=False)
+    remarks = models.TextField(max_length=500, default='no remarks', null=False)
     # book description select AVG (book_id)
 
 

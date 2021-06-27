@@ -68,8 +68,8 @@ def book_create_view(request):
     if request.method == "POST":
         title = request.POST.get('title')
         author = request.POST.get('author')
-        description = request.POST.get('description')
-        Book.objects.create(title=title, author=author, description=description)
+        #description = request.POST.get('description')
+        Book.objects.create(title=title, author=author)
         return redirect('books')
     return render(request, "adminapp/books_list.html")
 
@@ -81,11 +81,11 @@ def edit_book_view(request, id):
         if request.method == "POST":
             old_title = book.title
             old_author = book.author
-            old_description = book.description
+            old_remarks = book.remarks
             book.title = request.POST.get("title")
             book.author = request.POST.get("author")
-            book.description = request.POST.get("description")
-            if old_title != book.title or old_author != book.author or old_description != book.description:
+            book.remarks = request.POST.get("remarks")
+            if old_title != book.title or old_author != book.author or old_remarks != book.remarks:
                 book.save()
             return redirect(f'/edit-book/{id}')
         else:

@@ -27,7 +27,8 @@
                             <th scope="col">#</th>
                             <th scope="col">Title</th>
                             <th scope="col">Author</th>
-                            <th scope="col">Status</th>
+                            <th scope="col">Grade</th>
+                            <th scope="col"></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -36,12 +37,12 @@
                             <td>{{ forloop.counter }}</td>
                             <td>{{ book.title }}</td>
                             <td>{{ book.author }}</td>
-                            <td>
+
                                <!-- <a href="#" onclick="popGrading()" class="btn btn-danger">Return the book</a>
                                  /return-active-book/{{ book.id }} -->
                                 <form action="/return-active-book/{{ book.id }}" method="post" name="mark">
                                     {% csrf_token %}
-                                    <h5>Mark the book</h5>
+                                    <td>
                                     <div class="col-md-12">
                                         <div class="stars" >
                                             <input class="star star-5" id="star-5" type="radio" name="star" value="5" />
@@ -56,7 +57,10 @@
                                             <label class="star star-1" for="star-1"></label>
                                         </div>
                                     </div>
-                                    <button class="btn btn-danger" type="submit">Return the book</button>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-danger" type="submit">Return the book</button>
+                                    </td>
                                 </form>
                             </td>
                         </tr>

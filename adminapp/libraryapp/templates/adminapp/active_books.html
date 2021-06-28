@@ -39,11 +39,11 @@
                             <td>
                                <!-- <a href="#" onclick="popGrading()" class="btn btn-danger">Return the book</a>
                                  /return-active-book/{{ book.id }} -->
-                                <form action="/return-active-book/{{ book.id }}" method="post">
+                                <form action="/return-active-book/{{ book.id }}" method="post" name="mark">
                                     {% csrf_token %}
                                     <h5>Mark the book</h5>
                                     <div class="col-md-12">
-                                        <div class="stars">
+                                        <div class="stars" >
                                             <input class="star star-5" id="star-5" type="radio" name="star" value="EXCELLENT" />
                                             <label class="star star-5" for="star-5"></label>
                                             <input class="star star-4" id="star-4" type="radio" name="star" value="GOOD" />

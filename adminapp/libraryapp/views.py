@@ -1,3 +1,5 @@
+import operator
+
 from django.shortcuts import render, redirect
 from .models import User, BorrowTransaction, Book, Grade
 from .filters import UserFilter
@@ -5,7 +7,6 @@ from .filters import UserFilter
 
 def index(request):
     users = User.objects.all()
-
     myFilter = UserFilter(request.GET, queryset=users)
     users = myFilter.qs
 
@@ -31,9 +32,21 @@ def active_books(request, id):
     inactive_borrows = BorrowTransaction.objects.filter(is_returned='False')
     books_available = Book.objects.exclude(id__in=[borrow.book_id for borrow in inactive_borrows])
     borrow = BorrowTransaction.objects.filter(user_id=id)
+    #my_dict = {}
+    books_available_sorted = books_available.order_by()
+    for b in books_available:
+        print(b.get_average_grade())
+
+    #    my_dict[b] = b.get_average_grade()  # должен быть другой аргумет
+    # sorted_d = sorted(my_dict.items(), key=operator.itemgetter(1), reverse=True)
+    # print(sorted_d)
+    # books_available_sorted = [x for _, x in sorted(zip(grades, books_available))]
+    # for displaying books in most favoured category when choosing
+    # sort for avg_grades in descending order
 
     return render(request, "adminapp/active_books.html",
-                  {"user": user, "books": books, "books_available": books_available, "borrows": borrow})
+                  {"user": user, "books": books, "books_available": books_available,
+                   "books_available_sorted": books_available, "borrows": borrow})
 
 
 def add_active_book(request, id):
@@ -52,10 +65,10 @@ def return_active_book(request, id):
         active_borrow.save()
         user = User.objects.get(id=active_borrow.user_id)
         book = active_borrow.book
-        grade = request.POST.get('mark')
+        grade = request.POST.get('star')
         print(grade)
+        Grade.objects.create(user=user, book=book, grade=grade)
 
-        # Grade.objects.create(user=user, book=book, grade=grade)
         return redirect(f'/active-books/{user.id}')
     return render(request, "adminapp/active_books.html")
 

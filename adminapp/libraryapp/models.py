@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import SET_NULL
 from django.urls import reverse
+from django.db.models import Avg
 
 
 class TimeStampMixin(models.Model):
@@ -32,19 +33,11 @@ class Book(TimeStampMixin):
     author = models.CharField(max_length=40)
     remarks = models.TextField(max_length=500, default='no remarks', null=False)
 
-    # book description select AVG (book_id)
+
     def get_average_grade(self):
-        marks = Grade.objects.get(book_id=self.id)
-        total = 0
-        count = 0
-        for grade in marks:
-            if isinstance(grade, int):
-                total += grade
-                count += 1
-
-        return round(total / count, 2)
-
-    avg_grade = get_average_grade()
+        avg = Grade.objects.filter(book_id=self.id).aggregate(Avg('grade'))
+        print(avg)
+        return avg
 
 
 class BorrowTransaction(TimeStampMixin):
@@ -73,4 +66,5 @@ class Grade(TimeStampMixin):
 
     grade = models.IntegerField(
         choices=GRADES_CHOICES,
+        null=True
     )

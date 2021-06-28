@@ -41,23 +41,28 @@
                                  /return-active-book/{{ book.id }} -->
                                 <form action="/return-active-book/{{ book.id }}" method="post">
                                     {% csrf_token %}
-                                    <label for="cars">Mark the book</label>
-
-                                    <select name="mark" id="cars" required>
-                                      <option value="2">2</option>
-                                      <option value="3">3</option>
-                                      <option value="4">4</option>
-                                      <option value="5">5</option>
-                                    </select>
-
-                                    <button class="btn btn-danger" type="submit" >Return the book</button>
+                                    <h5>Mark the book</h5>
+                                    <div class="col-md-12">
+                                        <div class="stars">
+                                            <input class="star star-5" id="star-5" type="radio" name="star" value="EXCELLENT" />
+                                            <label class="star star-5" for="star-5"></label>
+                                            <input class="star star-4" id="star-4" type="radio" name="star" value="GOOD" />
+                                            <label class="star star-4" for="star-4"></label>
+                                            <input class="star star-3" id="star-3" type="radio" name="star" value="OKAY" />
+                                            <label class="star star-3" for="star-3"></label>
+                                            <input class="star star-2" id="star-2" type="radio" name="star" value="BAD" />
+                                            <label class="star star-2" for="star-2"></label>
+                                            <input class="star star-1" id="star-1" type="radio" name="star" value="AWFUL" />
+                                            <label class="star star-1" for="star-1"></label>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-danger" type="submit">Return the book</button>
                                 </form>
                             </td>
                         </tr>
                         {% endfor %}
                         </tbody>
                     </table>
-
                 </div>
 
             {% else %}
@@ -123,8 +128,21 @@
             <input type="submit" value="Add" class="btn btn-primary">
         </form>
     </div>
-</div>
+    <div class="col-4">
+        <form name="selectedBookId" method="POST" action="add_active/{{user.id}}">
+             {% csrf_token %}
+            <select name="selectedBookId" onchange="console.log(this.value)" class="form-control mb-3">
+                <option disabled="disabled" selected="selected">Most favoured</option>
+                {% for b in books_available_sorted %}
+                <option value="{{b.id}}">"{{b.title}}" {{b.author}} {{b.avg_grade}}</option>
+                {% endfor %}
+            </select>
 
+            <input type="submit" value="Add" class="btn btn-primary">
+        </form>
+    </div>
+
+</div>
 
 
 {% endif %}

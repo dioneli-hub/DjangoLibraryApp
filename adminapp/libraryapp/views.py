@@ -1,5 +1,7 @@
+import operator
+
 from django.shortcuts import render, redirect
-from .models import User, BorrowTransaction, Book
+from .models import User, BorrowTransaction, Book, Grade
 from .filters import UserFilter
 
 
@@ -15,6 +17,7 @@ def index(request):
 def books_list(request):
     books = Book.objects.all()
     for book in books:
+        book.book_rating = book.get_average_grade()
         transactions = BorrowTransaction.objects.filter(book_id=book.id)
         if len(transactions) == 0 or len(transactions.filter(is_returned=False)) == 0:
             book.status = 'Available'
@@ -32,8 +35,12 @@ def active_books(request, id):
     books_available = Book.objects.exclude(id__in=[borrow.book_id for borrow in inactive_borrows])
     borrow = BorrowTransaction.objects.filter(user_id=id)
 
+    for book in books:
+        book.book_rating = book.get_average_grade()
+
     return render(request, "adminapp/active_books.html",
-                  {"user": user, "books": books, "books_available": books_available, "borrows": borrow})
+                  {"user": user, "books": books, "books_available": books_available,
+                   "books_available_sorted": books_available, "borrows": borrow})
 
 
 def add_active_book(request, id):
@@ -45,13 +52,19 @@ def add_active_book(request, id):
     return render(request, "adminapp/active_books.html")
 
 
-def return_active_book(request, id):
-    if request.method == "GET":
-        active_borrow = BorrowTransaction.objects.filter(is_returned='False').get(book_id=id)
+def return_active_book(request, id, userId):
+    if request.method == "POST":
+        active_borrow = BorrowTransaction.objects.filter(is_returned=False, book_id=id, user_id=userId).get()
+
         active_borrow.is_returned = True
         active_borrow.save()
-        user = User.objects.get(id=active_borrow.user_id)
-        return redirect(f'/active-books/{user.id}')
+
+        grade = request.POST.get('mark')
+
+        if int(grade) > 0:
+            Grade.objects.create(user_id=userId, book_id=active_borrow.book_id, grade=grade)
+
+        return redirect(f'/active-books/{userId}')
     return render(request, "adminapp/active_books.html")
 
 
@@ -63,6 +76,7 @@ def book_create_view(request):
     if request.method == "POST":
         title = request.POST.get('title')
         author = request.POST.get('author')
+        # description = request.POST.get('description')
         Book.objects.create(title=title, author=author)
         return redirect('books')
     return render(request, "adminapp/books_list.html")
@@ -75,9 +89,11 @@ def edit_book_view(request, id):
         if request.method == "POST":
             old_title = book.title
             old_author = book.author
+            old_remarks = book.remarks
             book.title = request.POST.get("title")
             book.author = request.POST.get("author")
-            if old_title != book.title or old_author != book.author:
+            book.remarks = request.POST.get("remarks")
+            if old_title != book.title or old_author != book.author or old_remarks != book.remarks:
                 book.save()
             return redirect(f'/edit-book/{id}')
         else:
@@ -103,5 +119,3 @@ def change_user_active_view(request, id):
         user.save()
         return redirect('home')
     return render(request, 'adminapp/index.html')
-
-

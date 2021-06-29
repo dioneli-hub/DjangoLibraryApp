@@ -4,100 +4,124 @@
 
 {% block content %}
 <ul class="nav nav-tabs">
-  <li class="nav-item">
-    <a class="nav-link active" data-toggle="tab" href="#books">User's books</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" data-toggle="tab" href="#user-history">User's history</a>
-  </li>
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#books">User's books</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#user-history">User's history</a>
+    </li>
 </ul>
 <div class="tab-content">
     <div class="tab-pane fade show active" id="books">
         <div class="card">
-        <h5 class="card-header">{{user.first_name}} {{user.last_name}}</h5>
-        <div class="card-body">
-            <h5 class="card-title">Active user's books</h5>
+            <h5 class="card-header">{{user.first_name}} {{user.last_name}}</h5>
+            <div class="card-body">
+                <h5 class="card-title">Active user's books</h5>
 
-            {% if books %}
-                 <p class="card-text"><em>(here you can see the books {{user.first_name}} {{user.last_name}} reads)</em></p>
-                <div class="shadow p-3 mb-5 mt-4 bg-white rounded">
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">Author</th>
-                            <th scope="col">Status</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for book in books %}
-                        <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td>{{ book.title }}</td>
-                            <td>{{ book.author }}</td>
-                            <td>
-                                <a href="/return-active-book/{{ book.id }}" class="btn btn-danger">Return the book</a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            {% else %}
+                {% if books %}
+                <p class="card-text"><i>(here you can see the books {{user.first_name}} {{user.last_name}} reads)</i>
+                </p>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Author</th>
+                        <th scope="col">Rating</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for book in books %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ book.title }}</td>
+                        <td>{{ book.author }}</td>
+                        <td>{{ book.book_rating }}</td>
+                        <td>
+                            <form action="/return-active-book/{{book.id}}/{{user.id}}" method="post">
+                                {% csrf_token %}
+                                <h5>User Rate</h5>
+                                <div class="col-md-12">
+                                    <div class="stars">
+                                        <input class="star star-5" id="star-5-{{book.id}}" type="radio" name="mark"
+                                               value="5"/>
+                                        <label class="star star-5" for="star-5-{{book.id}}"></label>
+                                        <input class="star star-4" id="star-4-{{book.id}}" type="radio" name="mark"
+                                               value="4"/>
+                                        <label class="star star-4" for="star-4-{{book.id}}"></label>
+                                        <input class="star star-3" id="star-3-{{book.id}}" type="radio" name="mark"
+                                               value="3"/>
+                                        <label class="star star-3" for="star-3-{{book.id}}"></label>
+                                        <input class="star star-2" id="star-2-{{book.id}}" type="radio" name="mark"
+                                               value="2"/>
+                                        <label class="star star-2" for="star-2-{{book.id}}"></label>
+                                        <input class="star star-1" id="star-1-{{book.id}}" type="radio" name="mark"
+                                               value="1"/>
+                                        <label class="star star-1" for="star-1-{{book.id}}"></label>
+                                    </div>
+                                </div>
+                                <button class="btn btn-danger" type="submit">Return to library</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                {% else %}
                 <p>Not reading anything</p>
-            {% endif %}
-        </div>
+                {% endif %}
+            </div>
         </div>
     </div>
     <div class="tab-pane fade show" id="user-history">
         <h5 class="card-header">{{user.first_name}} {{user.last_name}}</h5>
         {% if borrows %}
-       <table class="table table-striped">
-           <thead>
-           <tr>
-               <th scope="col">#</th>
-               <th scope="col">Title</th>
-               <th scope="col">Author</th>
-               <th scope="col">Issued</th>
-               <th scope="col">Returned</th>
-               <th scope="col">Status</th>
-           </tr>
-           </thead>
-           <tbody>
-           {% for borrow in borrows %}
-           <tr>
-               <td>{{ forloop.counter }}</td>
-               <td>{{ borrow.book.title }}</td>
-               <td>{{ borrow.book.author }}</td>
-               <td>{{borrow.get_created_at}}</td>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">Author</th>
+                <th scope="col">Issued</th>
+                <th scope="col">Returned</th>
+                <th scope="col">Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for borrow in borrows %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ borrow.book.title }}</td>
+                <td>{{ borrow.book.author }}</td>
+                <td>{{borrow.get_created_at}}</td>
 
-               {% if borrow.is_returned %}
-               <td>{{borrow.get_updated_at}}</td>
-               {% else %}
-               <td>-</td>
-               {% endif %}
+                {% if borrow.is_returned %}
+                <td>{{borrow.get_updated_at}}</td>
+                {% else %}
+                <td>-</td>
+                {% endif %}
 
-               {% if borrow.is_returned %}
-               <td>Returned</td>
-               {% else %}
-               <td>Being read</td>
-               {% endif %}
-           </tr>
-           {% endfor %}
-           </tbody>
-       </table>
+                {% if borrow.is_returned %}
+                <td>Returned</td>
+                {% else %}
+                <td>Being read</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
         {% endif %}
     </div>
 </div>
-
 <br>
 {% if books_available %}
 <h4>Find a book:</h4>
 <div class="row">
     <div class="col-4">
         <form name="selectedBookId" method="POST" action="add_active/{{user.id}}">
-             {% csrf_token %}
+            {% csrf_token %}
             <select name="selectedBookId" onchange="console.log(this.value)" class="form-control mb-3">
                 <option disabled="disabled" selected="selected">Choose a book</option>
                 {% for b in books_available %}
@@ -105,9 +129,24 @@
                 {% endfor %}
             </select>
 
-            <input type="submit" value="Добавить" class="btn btn-primary">
+            <input type="submit" value="Add" class="btn btn-primary">
+        </form>
+    </div>
+    <div class="col-4">
+        <form name="selectedBookId" method="POST" action="add_active/{{user.id}}">
+            {% csrf_token %}
+            <select name="selectedBookId" onchange="console.log(this.value)" class="form-control mb-3">
+                <option disabled="disabled" selected="selected">Most favoured</option>
+                {% for b in books_available_sorted %}
+                <option value="{{b.id}}">"{{b.title}}" {{b.author}} {{b.avg_grade}}</option>
+                {% endfor %}
+            </select>
+
+            <input type="submit" value="Add" class="btn btn-primary">
         </form>
     </div>
 </div>
+
+
 {% endif %}
 {% endblock %}

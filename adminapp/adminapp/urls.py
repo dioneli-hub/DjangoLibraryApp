@@ -29,7 +29,7 @@ urlpatterns = [
     path('change-user-active/<int:id>', views.change_user_active_view, name='delete-user'),
     path('edit-book/<int:id>', views.edit_book_view, name='edit-book'),
     path('active-books/add_active/<int:id>', views.add_active_book, name='add-active'),
-    path('return-active-book/<int:id>', views.return_active_book, name='return-book'),
+    path('return-active-book/<int:id>/<int:userId>', views.return_active_book, name='return-book'),
 
     path('admin/', admin.site.urls),
 ]

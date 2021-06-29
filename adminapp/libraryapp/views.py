@@ -7,6 +7,7 @@ from .filters import UserFilter
 
 def index(request):
     users = User.objects.all()
+
     myFilter = UserFilter(request.GET, queryset=users)
     users = myFilter.qs
 
@@ -16,6 +17,7 @@ def index(request):
 def books_list(request):
     books = Book.objects.all()
     for book in books:
+        book.book_rating = book.get_average_grade()
         transactions = BorrowTransaction.objects.filter(book_id=book.id)
         if len(transactions) == 0 or len(transactions.filter(is_returned=False)) == 0:
             book.status = 'Available'
@@ -32,17 +34,9 @@ def active_books(request, id):
     inactive_borrows = BorrowTransaction.objects.filter(is_returned='False')
     books_available = Book.objects.exclude(id__in=[borrow.book_id for borrow in inactive_borrows])
     borrow = BorrowTransaction.objects.filter(user_id=id)
-    #my_dict = {}
-    books_available_sorted = books_available.order_by()
-    for b in books_available:
-        print(b.get_average_grade())
 
-    #    my_dict[b] = b.get_average_grade()  # должен быть другой аргумет
-    # sorted_d = sorted(my_dict.items(), key=operator.itemgetter(1), reverse=True)
-    # print(sorted_d)
-    # books_available_sorted = [x for _, x in sorted(zip(grades, books_available))]
-    # for displaying books in most favoured category when choosing
-    # sort for avg_grades in descending order
+    for book in books:
+        book.book_rating = book.get_average_grade()
 
     return render(request, "adminapp/active_books.html",
                   {"user": user, "books": books, "books_available": books_available,
@@ -58,18 +52,19 @@ def add_active_book(request, id):
     return render(request, "adminapp/active_books.html")
 
 
-def return_active_book(request, id):
+def return_active_book(request, id, userId):
     if request.method == "POST":
-        active_borrow = BorrowTransaction.objects.filter(is_returned='False').get(book_id=id)
+        active_borrow = BorrowTransaction.objects.filter(is_returned=False, book_id=id, user_id=userId).get()
+
         active_borrow.is_returned = True
         active_borrow.save()
-        user = User.objects.get(id=active_borrow.user_id)
-        book = active_borrow.book
-        grade = request.POST.get('star')
-        print(grade)
-        Grade.objects.create(user=user, book=book, grade=grade)
 
-        return redirect(f'/active-books/{user.id}')
+        grade = request.POST.get('mark')
+
+        if int(grade) > 0:
+            Grade.objects.create(user_id=userId, book_id=active_borrow.book_id, grade=grade)
+
+        return redirect(f'/active-books/{userId}')
     return render(request, "adminapp/active_books.html")
 
 
@@ -81,7 +76,7 @@ def book_create_view(request):
     if request.method == "POST":
         title = request.POST.get('title')
         author = request.POST.get('author')
-        #description = request.POST.get('description')
+        # description = request.POST.get('description')
         Book.objects.create(title=title, author=author)
         return redirect('books')
     return render(request, "adminapp/books_list.html")
@@ -124,5 +119,3 @@ def change_user_active_view(request, id):
         user.save()
         return redirect('home')
     return render(request, 'adminapp/index.html')
-
-

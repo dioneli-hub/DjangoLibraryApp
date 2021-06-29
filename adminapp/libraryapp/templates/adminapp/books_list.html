@@ -3,28 +3,26 @@
 {% block content %}
 <div>
     <div class="shadow p-3 mb-5 mt-4 bg-white rounded">
-        <p>
-            <b> Books list: </b>
-        </p>
+        <h2>Library Books</h2>
         <table class="table table-striped">
             <thead>
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Title</th>
                 <th scope="col">Author</th>
+                <th scope="col">Rating</th>
                 <th scope="col">Status</th>
                 <th scope="col"></th>
             </tr>
             </thead>
-               <tbody id="books-list">
+            <tbody id="books-list">
             {% for book in books %}
             <tr>
                 <td>{{ forloop.counter }}</td>
                 <td>{{ book.title }}</td>
                 <td>{{ book.author }}</td>
-                <td>
-                    {{book.status}}
-                </td>
+                <td>{{book.book_rating}}</td>
+                <td>{{book.status}}</td>
                 <td>
                     <a href="/edit-book/{{ book.id }}" class="btn btn-primary">Change</a>
                 </td>
@@ -32,24 +30,41 @@
             {% endfor %}
             </tbody>
         </table>
+
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createBookModal">
+            Add a new book
+        </button>
     </div>
-        <div class="card" style="width: 18rem;">
-        <div class="card-body">
-            <h5 class="card-title">Add a book:</h5>
-            <form name = "create_new_book" id = "new_book_form" method="POST"  action="create/">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="title">Title</label>
-                    <input type="text" class="form-control" id="title" name="title" required >
+
+    <div class="modal fade" id="createBookModal" tabindex="-1" role="dialog" aria-labelledby="createBookModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createBookModalLabel">Add a new book</h5>
+                    <i class="modal-subtitle ml-2">(verified data only)</i>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="form-group">
-                    <label for="author">Author</label>
-                    <input type="text" class="form-control" id="author" name="author" required>
+                <div class="modal-body">
+                    <form name="create_new_book" id="new_book_form" method="POST" action="create/">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="title">Title</label>
+                            <input type="text" class="form-control" id="title" name="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="author">Author</label>
+                            <input type="text" class="form-control" id="author" name="author" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" value="Save">Add</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </form>
                 </div>
-                <button type="submit" class="btn btn-primary" value="Save">Add</button>
-                <button type="reset" class="btn btn-primary">Cancel</button>
-            </form>
+            </div>
+        </div>
+    </div>
+
 </div>
-    {% endblock %}
-
-
+{% endblock %}

@@ -33,11 +33,14 @@ class Book(TimeStampMixin):
     author = models.CharField(max_length=40)
     remarks = models.TextField(max_length=500, default='no remarks', null=False)
 
-
     def get_average_grade(self):
-        avg = Grade.objects.filter(book_id=self.id).aggregate(Avg('grade'))
-        print(avg)
-        return avg
+        avg = Grade.objects.filter(book_id=self.id).aggregate(book_grade=Avg('grade'))
+        book_grade = avg['book_grade']
+
+        if book_grade is None:
+            return 0
+
+        return round(book_grade, 2)
 
 
 class BorrowTransaction(TimeStampMixin):
@@ -66,5 +69,4 @@ class Grade(TimeStampMixin):
 
     grade = models.IntegerField(
         choices=GRADES_CHOICES,
-        null=True
     )

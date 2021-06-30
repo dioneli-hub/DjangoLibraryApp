@@ -17,7 +17,7 @@ def index(request):
 def books_list(request):
     books = Book.objects.all()
     for book in books:
-        book.book_rating = book.get_average_grade()
+        book.book_rating = book.get_average_grade() if book.get_average_grade() > 0 else "NG"
         transactions = BorrowTransaction.objects.filter(book_id=book.id)
         if len(transactions) == 0 or len(transactions.filter(is_returned=False)) == 0:
             book.status = 'Available'

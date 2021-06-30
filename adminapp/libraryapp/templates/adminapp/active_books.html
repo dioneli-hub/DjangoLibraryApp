@@ -132,19 +132,7 @@
             <input type="submit" value="Add" class="btn btn-primary">
         </form>
     </div>
-    <div class="col-4">
-        <form name="selectedBookId" method="POST" action="add_active/{{user.id}}">
-            {% csrf_token %}
-            <select name="selectedBookId" onchange="console.log(this.value)" class="form-control mb-3">
-                <option disabled="disabled" selected="selected">Most favoured</option>
-                {% for b in books_available_sorted %}
-                <option value="{{b.id}}">"{{b.title}}" {{b.author}} {{b.avg_grade}}</option>
-                {% endfor %}
-            </select>
-
-            <input type="submit" value="Add" class="btn btn-primary">
-        </form>
-    </div>
+    
 </div>
 
 

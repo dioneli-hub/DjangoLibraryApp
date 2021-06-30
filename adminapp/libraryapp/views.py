@@ -76,7 +76,6 @@ def book_create_view(request):
     if request.method == "POST":
         title = request.POST.get('title')
         author = request.POST.get('author')
-        # description = request.POST.get('description')
         Book.objects.create(title=title, author=author)
         return redirect('books')
     return render(request, "adminapp/books_list.html")

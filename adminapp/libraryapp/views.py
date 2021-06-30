@@ -58,11 +58,11 @@ def return_active_book(request, id, userId):
 
         active_borrow.is_returned = True
         active_borrow.save()
-
         grade = request.POST.get('mark')
 
-        if int(grade) > 0:
-            Grade.objects.create(user_id=userId, book_id=active_borrow.book_id, grade=grade)
+        if grade is not None:
+            if int(grade) > 0:
+                Grade.objects.create(user_id=userId, book_id=active_borrow.book_id, grade=grade)
 
         return redirect(f'/active-books/{userId}')
     return render(request, "adminapp/active_books.html")

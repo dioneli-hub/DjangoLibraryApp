@@ -9,10 +9,10 @@ class TimeStampMixin(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def get_created_at(self):
-        return f'{self.created_at.strftime("%d.%m.%Y")} в {self.created_at.strftime("%H:%M:%S")}'
+        return f'{self.created_at.strftime("%d.%m.%Y")} at {self.created_at.strftime("%H:%M:%S")}'
 
     def get_updated_at(self):
-        return f'{self.updated_at.strftime("%d.%m.%Y")} в {self.updated_at.strftime("%H:%M:%S")}'
+        return f'{self.updated_at.strftime("%d.%m.%Y")} at {self.updated_at.strftime("%H:%M:%S")}'
 
     class Meta:
         abstract = True

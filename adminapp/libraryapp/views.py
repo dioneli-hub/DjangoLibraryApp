@@ -36,7 +36,7 @@ def active_books(request, id):
     borrow = BorrowTransaction.objects.filter(user_id=id)
 
     for book in books:
-        book.book_rating = book.get_average_grade()
+        book.book_rating = book.get_average_grade() if book.get_average_grade() > 0 else "NG"
 
     return render(request, "adminapp/active_books.html",
                   {"user": user, "books": books, "books_available": books_available,
